@@ -9,7 +9,7 @@ colorama==0.4.6
 dbt-core==1.5.2
 dbt-duckdb==1.5.2
 dbt-extractor==0.4.1
-duckdb==0.8.1
+duckdb==1.0.0
 future==0.18.3
 hologram==0.0.16
 idna==3.4
