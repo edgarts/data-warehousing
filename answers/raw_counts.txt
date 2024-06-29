@@ -1,0 +1,8 @@
+Table: bike_data, number of rows: 4,780,363
+Table: central_park_weather, number of rows: 2,984
+Table: fhvhv_tripdata, number of rows: 32,182,272
+Table: fhv_bases, number of rows: 1,097
+Table: fhv_tripdata, number of rows: 3,008,649
+Table: green_tripdata, number of rows: 238,718
+Table: taxi_zones, number of rows: 263
+Table: yellow_tripdata, number of rows: 5,454,972
