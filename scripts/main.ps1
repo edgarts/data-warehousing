@@ -10,20 +10,20 @@ mv ./data/taxi/*.* ./data
 mv ./data/taxi_zones/*.* ./data
 
 # Command to create create the duckdb database and set the temp directory
-duckdb ./database/main.db -s "SET temp_directory TO './database/temp'"
+duckdb ./database/nyc_transit.db -s "SET temp_directory TO './database/temp'"
 
 # Change directory to .data so when read_csv and read parquet are used with filename option
 # they don't include the dir path
 cd ./data
 
 # Command to ingest data into the duckdb database
-duckdb ../database/main.db -s ".read ../sql/ingest.sql"
+duckdb ../database/nyc_transit.db -s ".read ../sql/ingest.sql"
 
 # Return to root directory for the remaining commands
 cd ../
 
 # Command to print out the table names and schemas
-duckdb ./database/main.db -s ".read ./sql/dump_raw_schemas.sql" > ./answers/raw_schemas.txt
+duckdb ./database/nyc_transit.db -s ".read ./sql/dump_raw_schemas.sql" > ./answers/raw_schemas.txt
 
 # Python script to print out the table names and row counts
 py ./scripts/dump_raw_counts.py > ./answers/raw_counts.txt

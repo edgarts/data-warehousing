@@ -1,23 +1,35 @@
 .mode quote
 
+-- List tables
+SHOW TABLES;
+'name'
+'bike_data'
+'central_park_weather'
+'fhv_bases'
+'fhv_tripdata'
+'fhvhv_tripdata'
+'green_tripdata'
+'taxi_zones'
+'yellow_tripdata'
+
 -- Describe  table for bike data
 DESCRIBE bike_data;
 'column_name','column_type','null','key','default','extra'
-'tripduration','BIGINT','YES',NULL,NULL,NULL
-'starttime','TIMESTAMP','YES',NULL,NULL,NULL
-'stoptime','TIMESTAMP','YES',NULL,NULL,NULL
-'start station id','BIGINT','YES',NULL,NULL,NULL
+'tripduration','VARCHAR','YES',NULL,NULL,NULL
+'starttime','VARCHAR','YES',NULL,NULL,NULL
+'stoptime','VARCHAR','YES',NULL,NULL,NULL
+'start station id','VARCHAR','YES',NULL,NULL,NULL
 'start station name','VARCHAR','YES',NULL,NULL,NULL
-'start station latitude','DOUBLE','YES',NULL,NULL,NULL
-'start station longitude','DOUBLE','YES',NULL,NULL,NULL
-'end station id','BIGINT','YES',NULL,NULL,NULL
+'start station latitude','VARCHAR','YES',NULL,NULL,NULL
+'start station longitude','VARCHAR','YES',NULL,NULL,NULL
+'end station id','VARCHAR','YES',NULL,NULL,NULL
 'end station name','VARCHAR','YES',NULL,NULL,NULL
-'end station latitude','DOUBLE','YES',NULL,NULL,NULL
-'end station longitude','DOUBLE','YES',NULL,NULL,NULL
-'bikeid','BIGINT','YES',NULL,NULL,NULL
+'end station latitude','VARCHAR','YES',NULL,NULL,NULL
+'end station longitude','VARCHAR','YES',NULL,NULL,NULL
+'bikeid','VARCHAR','YES',NULL,NULL,NULL
 'usertype','VARCHAR','YES',NULL,NULL,NULL
-'birth year','BIGINT','YES',NULL,NULL,NULL
-'gender','BIGINT','YES',NULL,NULL,NULL
+'birth year','VARCHAR','YES',NULL,NULL,NULL
+'gender','VARCHAR','YES',NULL,NULL,NULL
 'ride_id','VARCHAR','YES',NULL,NULL,NULL
 'rideable_type','VARCHAR','YES',NULL,NULL,NULL
 'started_at','VARCHAR','YES',NULL,NULL,NULL
@@ -38,13 +50,13 @@ DESCRIBE central_park_weather;
 'column_name','column_type','null','key','default','extra'
 'STATION','VARCHAR','YES',NULL,NULL,NULL
 'NAME','VARCHAR','YES',NULL,NULL,NULL
-'DATE','DATE','YES',NULL,NULL,NULL
-'AWND','DOUBLE','YES',NULL,NULL,NULL
-'PRCP','DOUBLE','YES',NULL,NULL,NULL
-'SNOW','DOUBLE','YES',NULL,NULL,NULL
-'SNWD','DOUBLE','YES',NULL,NULL,NULL
-'TMAX','BIGINT','YES',NULL,NULL,NULL
-'TMIN','BIGINT','YES',NULL,NULL,NULL
+'DATE','VARCHAR','YES',NULL,NULL,NULL
+'AWND','VARCHAR','YES',NULL,NULL,NULL
+'PRCP','VARCHAR','YES',NULL,NULL,NULL
+'SNOW','VARCHAR','YES',NULL,NULL,NULL
+'SNWD','VARCHAR','YES',NULL,NULL,NULL
+'TMAX','VARCHAR','YES',NULL,NULL,NULL
+'TMIN','VARCHAR','YES',NULL,NULL,NULL
 'filename','VARCHAR','YES',NULL,NULL,NULL
 
 -- Describe table for taxi zones

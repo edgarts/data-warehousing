@@ -4,6 +4,9 @@
 .echo on
 .mode quote
 
+-- List tables
+SHOW TABLES;
+
 -- Describe  table for bike data
 DESCRIBE bike_data;
 

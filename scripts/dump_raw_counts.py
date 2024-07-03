@@ -3,7 +3,7 @@
 import duckdb
 
 # Opens connection to the duckdb database
-con = duckdb.connect('./database/main.db')
+con = duckdb.connect('./database/nyc_transit.db')
 
 # Gets a list of table names from the main schema (the only one schema for this database)
 tables = con.sql('SELECT table_name FROM information_schema.tables').fetchall()
