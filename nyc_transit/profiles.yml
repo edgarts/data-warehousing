@@ -1,0 +1,7 @@
+nyc_transit:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: '../database/nyc_transit.db'
+      threads: 1
