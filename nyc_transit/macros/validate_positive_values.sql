@@ -1,5 +1,5 @@
 -- This macro creates the case statement to make null all negative values
--- Parameters: column_name  - name of the column that contains the code value
+-- Parameters: column_name  - name of the column
 -- Parts of the code for this macro were taken from the following sources:
 -- https://docs.getdbt.com/guides/using-jinja?step=1
 -- https://documentation.bloomreach.com/engagement/docs/jinja

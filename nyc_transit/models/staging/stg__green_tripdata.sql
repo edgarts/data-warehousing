@@ -22,7 +22,7 @@ renamed as (
         -- store_and_fwd_flag indicates whether the trip record was held in vehicle
         -- memory before sending to the vendor, aka “store and forward,”
         -- because the vehicle did not have a connection to the server.
-        store_and_fwd_flag,
+        {{ code_to_category("store_and_fwd_flag", "Flag") }} as store_and_fwd_flag,
         -- ratecodeid is the final rate code in effect at the end of the trip.
         -- 1=Standard rate, 2=JFK, 3=Newark, 4=Nassau or Westchester,
         -- 5=Negotiated fare, 6=Group ride

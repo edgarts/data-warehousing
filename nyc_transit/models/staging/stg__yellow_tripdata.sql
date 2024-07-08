@@ -27,7 +27,10 @@ renamed as (
         -- 1=Standard rate, 2=JFK, 3=Newark, 4=Nassau or Westchester,
         -- 5=Negotiated fare, 6=Group ride
         {{ code_to_category("ratecodeid", "RateCode") }} as rate_code_id,
-        store_and_fwd_flag,
+        -- store_and_fwd_flag indicates whether the trip record was held in vehicle
+        -- memory before sending to the vendor, aka “store and forward,”
+        -- because the vehicle did not have a connection to the server.
+        {{ code_to_category("store_and_fwd_flag", "Flag") }} as store_and_fwd_flag,
         TRY_CAST(pulocationid as integer) as pickup_location_id,
         TRY_CAST(dolocationid as integer) as dropoff_location_id,
         -- payment_type code values are:
