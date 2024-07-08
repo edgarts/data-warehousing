@@ -23,8 +23,7 @@
     -- Load the specific map
     {% set conversion_map = catalog_map[catalog_name] %}
 
-    -- Creates the case statement based on the mapping. If the first value of the pair is numeric 
-    -- then that is not quoted, otherwise it is.
+    -- Creates the case statement based on the mapping.
     {% set case_statement %}
         case
         {% for conversion_value in conversion_map %}
