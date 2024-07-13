@@ -9,15 +9,17 @@ with source as (
 
 -- bike_data is composed by 2 different file formats, the old and the new,
 -- combined horizontally so it needs to be split and then rejoined.
--- rideid and rideable_type columns from the new format should be removed
--- for consistency, as well as bikeid, birth_year and gender from the old
--- format.
+-- rideid and rideable_type columns from the new format  as well as 
+-- bikeid, birth_year and gender from the old format should be included
+-- in both sets to avoid missing this information.
 
 -- Cast data types and rename columns for the old format columns
 old_format_renamed as (
 
     select
 
+        ride_id,
+        rideable_type,
         TRY_CAST(tripduration as integer) as trip_duration_sec,
         TRY_CAST(starttime as datetime) as start_time,
         TRY_CAST(stoptime as datetime) as stop_time,
@@ -32,6 +34,9 @@ old_format_renamed as (
         -- user type values are Customer or Subscriber in the old format so
         -- changing them to casual and member respectively to match new format
         {{ code_to_category("usertype", "UserType") }} as user_type,
+        TRY_CAST(bikeid as bigint) as bike_id,
+        TRY_CAST("birth year" as integer) as birthyear,
+        {{ code_to_category("gender", "Gender") }} as gender,
         filename
  
     from source
@@ -48,6 +53,8 @@ new_format_renamed as (
 
     select
 
+        ride_id,
+        rideable_type,
         -- tripduration doesn't exist in the new format but can be calculated
         datediff('second', TRY_CAST(started_at as datetime), TRY_CAST(ended_at as datetime)) as trip_duration_sec,
         TRY_CAST(started_at as datetime) as start_time,
@@ -60,10 +67,11 @@ new_format_renamed as (
         end_station_name,
         TRY_CAST(end_lat as double) as end_station_latitude,
         TRY_CAST(end_lng as double) as end_station_longitude,
-        -- member_casual values are member or casual,
+        -- member_casual values are member or casual
         member_casual as user_type,
-        -- 'birth year' and gender are not used in the new format but
-        -- left to match the old format
+        TRY_CAST(bikeid as bigint) as bike_id,
+        TRY_CAST("birth year" as integer) as birthyear,
+        {{ code_to_category("gender", "Gender") }} as gender,
         filename
  
     from source

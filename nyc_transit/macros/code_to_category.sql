@@ -18,7 +18,8 @@
                            "VendorID":[(1,"'Creative Mobile Technologies, LLC'"),(2,"'Verifone Inc.'")],
                            "TripType":[(1,"'Street-hail'"),(2,"'Dispatch'")],
                            "RateCode":[(1,"'StandardRate'"),(2,"'JFK'"),(3,"'Newark'"),(4,"'Nassau or Westchester'"),(5, "'Negotiated fare'"),(6,"'Group ride'")],
-                           "PaymentType":[(1,"'Credit card'"),(2,"'Cash'"),(3,"'No charge'"),(4,"'Dispute'"),(5,"'Unknown'"),(6,"'Voided trip'")]}) %}
+                           "PaymentType":[(1,"'Credit card'"),(2,"'Cash'"),(3,"'No charge'"),(4,"'Dispute'"),(5,"'Unknown'"),(6,"'Voided trip'")],
+                           "Gender":[(0,"'Unknown'"),(1,"'Male'"),(2,"'Female'")]}) %}
 
     -- Load the specific map
     {% set conversion_map = catalog_map[catalog_name] %}

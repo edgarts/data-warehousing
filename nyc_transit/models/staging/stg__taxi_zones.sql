@@ -15,7 +15,7 @@ renamed as (
         objectid as object_id,
         shape_leng as shape_lenght,
         shape_area,
-        zone,
+        zone as zone_name,
         locationid as location_id,
         borough,
         geom,
