@@ -13,6 +13,9 @@ renamed as (
 
     select
 
+        -- Removing trailing spaces and changing base to upper case
+        -- to match reference tests with fhv_bases
+        -- UPPER(RTRIM(dispatching_base_num)) as dispatching_base_num,
         dispatching_base_num,
         pickup_datetime,
         TRY_CAST(pulocationid as integer) as pickup_location_id,
@@ -27,6 +30,11 @@ renamed as (
         filename
 
     from source
+    -- Per the relation between dispatching_base_num to fhv_bases.base_number,
+    -- excluding those records which base_number doesn't exist in the bases catalog.
+    -- There are 153K+ records which bases don't exist, ~5% of 3M+ records.
+    where dispatching_base_num in
+    (select base_number from fhv_bases)
 
 )
 

@@ -12,16 +12,22 @@ renamed as (
 
     select
 
-        objectid as object_id,
-        shape_leng as shape_lenght,
-        shape_area,
-        zone as zone_name,
+        -- Some locationid are repeated and must be unique so in order
+        -- to enforce it for the test, only one is being selected using
+        -- min, max and group by. Further analysis would be required
+        -- to determine why are they duplicated and which one is the 
+        -- right one. Using this solution for now.
+        min(objectid) as object_id,
+        max(shape_leng) as shape_lenght,
+        max(shape_area) as shape_area,
+        min(zone) as zone_name,
         locationid as location_id,
-        borough,
-        geom,
+        min(borough),
+        min(geom),
         filename
 
     from source
+    group by locationid, filename
 
 )
 

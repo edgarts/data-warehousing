@@ -49,6 +49,23 @@ renamed as (
         filename,
 
     from source
+    -- Per the vendorif test, excluding those records which values are neither 1 nor 2.
+    -- Only 16 records have a value of 6 in 238K+ records, <1%.
+    where vendorid in (1, 2)
+    -- Per the trip_distance test, excluding those records which values are not >= 0.
+    -- Only 52 records have a negative value in 238K+ records, <1%.
+    and trip_distance > 0
+    -- Per the relation between pulocationid to taxi_zones.locationid,
+    -- excluding those records which locationid doesn't exist in the zones catalog.
+    -- There are 1,283 records which locations don't exist, <1% of 238K+ records.
+    and pickup_location_id in
+    (select locationid from taxi_zones)
+    -- Per the relation between dolocationid to taxi_zones.locationid,
+    -- excluding those records which locationid doesn't exist in the zones catalog.
+    -- There are 502 records which locations don't exist, <1% of 238K+ records.
+    and dropoff_location_id in
+    (select locationid from taxi_zones)
+    -- After all filtering 228K+ remain of a raw count of 238K+, around 96%.
 
 )
 

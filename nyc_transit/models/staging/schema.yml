@@ -1,0 +1,688 @@
+models:
+  - name: stg__bike_data
+    description: "NYC Citi Bike System Trip Histories"
+    columns:
+      - name: ride_id
+        data_type: varchar
+        description: "Ride Id"
+      - name: rideable_type
+        data_type: varchar
+        description: "Type of Bike: classic, docked or electric"
+      - name: trip_duration_sec
+        data_type: bigint
+        description: "Trip Duration in seconds"
+        data_tests:
+          - dbt_expectations.expect_column_to_exist
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: bigint
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 86400 # Records outside range filtered out in staging model
+      - name: start_time
+        data_type: timestamp
+        description: "Trip Start Time and Date"
+        data_tests:
+          - not_null
+          - dbt_expectations.expect_column_to_exist
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: timestamp
+      - name: stop_time
+        data_type: timestamp
+        description: "Trip End Time and Date"
+        data_tests:
+          - not_null
+          - dbt_expectations.expect_column_to_exist
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: timestamp
+      - name: start_station_id
+        data_type: integer
+        description: "Trip Start Station Id"
+        data_tests:
+          - not_null # Null records filtered out in staging model
+          - dbt_expectations.expect_column_to_exist
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: integer
+      - name: start_station_name
+        data_type: varchar
+        description: "Trip Start Station Name"
+      - name: start_station_latitude
+        data_type: double
+        description: "Trip Start Station Latitude"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: double
+      - name: start_station_longitude
+        data_type: double
+        description: "Trip Start Station Longitude"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: double
+      - name: end_station_id
+        data_type: integer
+        description: "Trip End Station Id"
+        data_tests:
+          - not_null # Null records filtered out in staging model
+          - dbt_expectations.expect_column_to_exist
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: integer
+      - name: end_station_name
+        data_type: varchar
+        description: "Trip End Station Name"
+      - name: end_station_latitude
+        data_type: double
+        description: "Trip End Station Latitude"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: double
+      - name: end_station_longitude
+        data_type: double
+        description: "Trip End Station Longitude"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: double
+      - name: user_type
+        data_type: varchar
+        description: "Member or Casual Ride"
+        data_tests:
+          - accepted_values:
+              values: ['member','casual']
+      - name: bike_id
+        data_type: bigint
+        description: "Bike Identification Number"
+      - name: birthyear
+        data_type: integer
+        description: "Rider's Year of Birth"
+      - name: gender
+        data_type: varchar
+        description: "Rider's Gender"
+      - name: filename
+        data_type: varchar
+        description: "Name of the Raw Data Source File"
+
+  - name: stg__central_park_weather
+    description: "Central Park Weather Observation Records"
+    columns:
+      - name: station
+        data_type: varchar
+        description: "Station"
+        data_tests:
+          - not_null
+      - name: name
+        data_type: varchar
+        description: "Station Name"
+      - name: date
+        data_type: date
+        description: "Observation Date"
+        data_tests:
+          - not_null
+          - unique
+          - dbt_expectations.expect_column_to_exist
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+      - name: avg_wind_speed
+        data_type: double
+        description: "Average Daily Wind Speed"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: double
+      - name: precipitation
+        data_type: double
+        description: "Precipitation (i.e., rain, melted snow)"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: double
+      - name: snowfall
+        data_type: double
+        description: "Snowfall"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: double
+      - name: snow_depth
+        data_type: double
+        description: "Snowdepth"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: double
+      - name: max_temperature
+        data_type: integer
+        description: "Highest Daily Temperature"
+        data_tests:
+          - not_null
+          - dbt_expectations.expect_column_to_exist
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: integer
+      - name: min_temperature
+        data_type: integer
+        description: "Lowest Daily Temperature"
+        data_tests:
+          - not_null
+          - dbt_expectations.expect_column_to_exist
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: integer
+      - name: filename
+        data_type: varchar
+        description: "Name of the Raw Data Source File"
+
+  - name: stg__fhv_bases
+    description: "For Hire Vehicle Bases"
+    columns:
+      - name: base_number
+        data_type: varchar
+        description: "The TLC license number of the dispatching base"
+        data_tests:
+          - not_null
+          - unique
+          - dbt_expectations.expect_column_to_exist
+      - name: base_name
+        data_type: varchar
+        description: "The official name of the base entity"
+      - name: doing_business_as
+        data_type: varchar
+        description: "The “doing business as” name of the base"
+      - name: business_category
+        data_type: varchar
+        description: "The “doing business as” base category"
+      - name: filename
+        data_type: varchar
+        description: "Name of the Raw Data Source File"
+
+  - name: stg__fhv_tripdata
+    description: ""
+    columns:
+      - name: dispatching_base_num
+        data_type: varchar
+        description: "The TLC Base License Number of the base that dispatched the trip"
+        data_tests:
+          - not_null
+          - dbt_expectations.expect_column_to_exist
+          - relationships: # Records not matching are filtered out in staging model
+              to: ref('stg__fhv_bases')
+              field: base_number
+      - name: pickup_datetime
+        data_type: timestamp
+        description: "The date and time of the trip pick-up"
+        data_tests:
+          - dbt_expectations.expect_column_to_exist
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: timestamp
+      - name: pickup_location_id
+        data_type: integer
+        description: "TLC Taxi Zone in which the trip began"
+        data_tests:
+          - dbt_expectations.expect_column_to_exist
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: integer
+          - relationships: # Not enforcing this test because there are so many nulls values that if deleted will take out a lot of records
+              to: ref('stg__taxi_zones')
+              field: location_id
+              config:
+                severity: warn
+      - name: dropoff_datetime
+        data_type: timestamp
+        description: "The date and time of the trip dropoff"
+        data_tests:
+          - not_null
+          - dbt_expectations.expect_column_to_exist
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: timestamp
+      - name: dropoff_location_id
+        data_type: integer
+        description: "TLC Taxi Zone in which the trip ended"
+        data_tests:
+          - dbt_expectations.expect_column_to_exist
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: integer
+          - relationships: # Not enforcing this test because there are so many nulls values that if deleted will take out a lot of records
+              to: ref('stg__taxi_zones')
+              field: location_id
+              config:
+                severity: warn
+      - name: affiliated_base_number
+        data_type: varchar
+        description: "The TLC license number of the base that is affiliated with the
+                      vehicle that serviced the trip. In many cases this will be the
+                      same base number as the dispatching base"
+      - name: filename
+        data_type: varchar
+        description: "Name of the Raw Data Source File"
+
+  - name: stg__fhvhv_tripdata
+    description: "For Hire Vehicle High Volume Trip Records"
+    columns:
+      - name: hvfhs_license_num
+        data_type: varchar
+        description: "The TLC license number of the HVFHS base or business
+                      As of September 2019, the HVFHS licensees are the following:
+                      • HV0002: Juno
+                      • HV0003: Uber
+                      • HV0004: Via
+                      • HV0005: Lyft"
+        data_tests:
+          - not_null
+      - name: dispatching_base_num
+        data_type: varchar
+        description: "The TLC Base License Number of the base that dispatched the trip"
+        data_tests:
+          - not_null
+          - dbt_expectations.expect_column_to_exist
+          - relationships: # Records not matching are filtered out in staging model
+              to: ref('stg__fhv_bases')
+              field: base_number
+      - name: originating_base_num
+        data_type: varchar
+        description: "Base number of the base that received the original trip request"
+        data_tests:
+          - relationships:
+              to: ref('stg__fhv_bases')
+              field: base_number
+              config:
+                severity: error
+      - name: request_datetime
+        data_type: timestamp
+        description: "The date/time when passenger requested to be picked up"
+        data_tests:
+          - not_null # Null records are filtered out in staging model
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: timestamp
+      - name: on_scene_datetime
+        data_type: timestamp
+        description: "The date/time when driver arrived at the pick-up location (Accessible Vehicles-only)"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: timestamp
+      - name: pickup_datetime
+        data_type: timestamp
+        description: "The date and time of the trip pick-up"
+        data_tests:
+          - not_null
+          - dbt_expectations.expect_column_to_exist
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: timestamp
+      - name: dropoff_datetime
+        data_type: timestamp
+        description: "The date and time of the trip drop-off"
+        data_tests:
+          - not_null
+          - dbt_expectations.expect_column_to_exist
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: timestamp
+      - name: pickup_location_id
+        data_type: integer
+        description: "TLC Taxi Zone in which the trip began"
+        data_tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: integer
+          - relationships: # Records not matching are filtered out in staging model
+              to: ref('stg__taxi_zones')
+              field: location_id
+      - name: dropoff_location_id
+        data_type: integer
+        description: "TLC Taxi Zone in which the trip ended"
+        data_tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: integer
+          - relationships: # Records not matching are filtered out in staging model
+              to: ref('stg__taxi_zones')
+              field: location_id
+      - name: trip_distance
+        data_type: double
+        description: "The total miles for passenger trip"
+        data_tests:
+          - not_null
+          - dbt_expectations.expect_column_to_exist
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 600
+      - name: trip_time_sec
+        data_type: bigint
+        description: "The total time in seconds for passenger trip"
+        data_tests:
+          - not_null
+          - dbt_expectations.expect_column_to_exist
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+      - name: base_passenger_fare
+        data_type: double
+        description: "The base passenger fare before tolls, tips, taxes, and fees"
+        data_tests:
+          - not_null
+          - dbt_expectations.expect_column_to_exist
+      - name: tolls_amount
+        data_type: double
+        description: "The total amount of all tolls paid in trip"
+      - name: black_car_fund
+        data_type: double
+        description: "The total amount collected in trip for Black Car Fund"
+      - name: sales_tax
+        data_type: double
+        description: "The total amount collected in trip for NYS sales tax"
+      - name: congestion_surcharge
+        data_type: double
+        description: "The total amount collected in trip for NYS congestion surcharge"
+      - name: tip_amount
+        data_type: double
+        description: "The total amount of tips received from passenger"
+      - name: driver_pay
+        data_type: double
+        description: "The total driver pay (not including tolls or tips and net of commission, surcharges, or taxes)"
+        data_tests:
+          - not_null
+      - name: shared_request_flag
+        data_type: boolean
+        description: "Did the passenger agree to a shared/pooled ride, regardless of whether they were matched? (T/F)"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: boolean
+      - name: shared_match_flag
+        data_type: boolean
+        description: "Did the passenger share the vehicle with another passenger who booked separately at any point during the trip? (T/F)"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: boolean
+      - name: mta_admin_ride
+        data_type: boolean
+        description: "Was the trip administered on behalf of the Metropolitan Transportation Authority (MTA)? (T/F)"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: boolean
+      - name: wav_request_flag
+        data_type: boolean
+        description: "Did the passenger request a wheelchair-accessible vehicle (WAV)? (T/F)"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: boolean
+      - name: wav_match_flag
+        data_type: boolean
+        description: "Did the trip occur in a wheelchair-accessible vehicle (WAV)? (T/F)"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: boolean
+      - name: filename
+        data_type: varchar
+        description: "Name of the Raw Data Source File"
+
+  - name: stg__green_tripdata
+    description: "Street Hail Livery (SHL) / Green Cab Trip Records"
+    columns:
+      - name: vendor_id
+        data_type: varchar
+        description: "LPEP provider that provided the record.
+                      Creative Mobile Technologies, LLC; VeriFone Inc."
+        data_tests:
+          - accepted_values: # Records not matching are filtered out in staging model
+              values: ['Creative Mobile Technologies, LLC','Verifone Inc.']
+      - name: pickup_datetime
+        data_type: timestamp
+        description: "The date and time when the meter was engaged."
+        data_tests:
+          - not_null
+          - dbt_expectations.expect_column_to_exist
+      - name: dropoff_datetime
+        data_type: timestamp
+        description: "The date and time when the meter was disengaged."
+        data_tests:
+          - not_null
+          - dbt_expectations.expect_column_to_exist
+      - name: store_and_fwd_flag
+        data_type: boolean
+        description: "This flag indicates whether the trip record was held in vehicle memory before sending to the vendor,
+                      aka “store and forward,” because the vehicle did not have a connection to the server.
+                      T= store and forward trip
+                      F= not a store and forward trip"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: boolean
+      - name: rate_code_id
+        data_type: varchar
+        description: "The final rate code in effect at the end of the trip.
+                      Standard rate
+                      JFK
+                      Newark
+                      Nassau or Westchester
+                      Negotiated fare
+                      Group ride"
+        data_tests:
+          - accepted_values:
+              values: ['StandardRate','JFK','Newark','Nassau or Westchester','Negotiated fare','Group ride']
+      - name: pickup_location_id
+        data_type: integer
+        description: "TLC Taxi Zone in which the taximeter was engaged"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: integer
+          - relationships: # Records not matching are filtered out in staging model
+              to: ref('stg__taxi_zones')
+              field: location_id
+      - name: dropoff_location_id
+        data_type: integer
+        description: "TLC Taxi Zone in which the taximeter was disengaged"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: integer
+          - relationships: # Records not matching are filtered out in staging model
+              to: ref('stg__taxi_zones')
+              field: location_id
+      - name: passenger_count
+        data_type: integer
+        description: "The number of passengers in the vehicle.
+                      This is a driver-entered value."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: integer
+      - name: trip_distance
+        data_type: double
+        description: "The elapsed trip distance in miles reported by the taximeter."
+        data_tests:
+          - not_null
+          - dbt_expectations.expect_column_to_exist
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0 # Negative records are filtered out in staging model
+      - name: fare_amount
+        data_type: double
+        description: "The time-and-distance fare calculated by the meter."
+      - name: extra
+        data_type: double
+        description: "Miscellaneous extras and surcharges. Currently, this only includes the $0.50 and $1 rush
+                      hour and overnight charges."
+      - name: mta_tax
+        data_type: double
+        description: "$0.50 MTA tax that is automatically triggered based on the metered rate in use."
+      - name: tip_amount
+        data_type: double
+        description: "Tip amount - This field is automatically populated for credit card tips. Cash tips are not included."
+      - name: tolls_amount
+        data_type: double
+        description: "Total amount of all tolls paid in trip."
+      - name: improvement_surcharge
+        data_type: double
+        description: "$0.30 improvement surcharge assessed on hailed trips at the flag drop. The improvement surcharge
+                      began being levied in 2015."
+      - name: total_amount
+        data_type: double
+        description: "The total amount charged to passengers. Does not include cash tips."
+      - name: payment_type
+        data_type: varchar
+        description: "How the passenger paid for the trip.
+                      Credit card
+                      Cash
+                      No charge
+                      Dispute
+                      Unknown
+                      Voided trip"
+        data_tests:
+          - accepted_values:
+              values: ['Credit card','Cash','No charge','Dispute','Unknown','Voided trip']
+      - name: trip_type
+        data_type: varchar
+        description: "Whether the trip was a street-hail or a dispatch that is automatically assigned
+                      based on the metered rate in use but can be altered by the driver.
+                      Street-hail
+                      Dispatch"
+        data_tests:
+          - accepted_values:
+              values: ['Street-hail','Dispatch']
+      - name: congestion_surcharge
+        data_type: double
+        description: "Total amount collected in trip for NYS congestion surcharge."
+      - name: filename
+        data_type: varchar
+        description: "Name of the Raw Data Source File"
+
+  - name: stg__taxi_zones
+    description: "NYC Taxi Zones"
+    columns:
+      - name: object_id
+        data_type: integer
+        description: "Consecutive Id"
+        data_tests:
+          - not_null
+          - unique
+      - name: shape_lenght
+        data_type: double
+        description: "Taxi Zone Lenght"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0 # Looking for positive lenghts
+      - name: shape_area
+        data_type: double
+        description: "Taxi Zone Area"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0 # Looking for positive areas
+      - name: zone_name
+        data_type: varchar
+        description: "Taxi Zone Name"
+        data_tests:
+          - not_null
+      - name: location_id
+        data_type: integer
+        description: "Taxi Zone Location Id"
+        data_tests:
+          - not_null
+          - unique
+      - name: borough
+        data_type: varchar
+        description: "Taxi Zone Borough"
+      - name: geom
+        data_type: geometry
+        description: "Taxi Zone Geolocation"
+      - name: filename
+        data_type: varchar
+        description: "Name of the Raw Data Source File"
+
+  - name: stg__yellow_tripdata
+    description: "Yellow Taxi Trip Records"
+    columns:
+      - name: vendor_id
+        data_type: varchar
+        description: "LPEP provider that provided the record.
+                      Creative Mobile Technologies, LLC; VeriFone Inc."
+        data_tests:
+          - accepted_values:
+              values: ['Creative Mobile Technologies, LLC','Verifone Inc.']
+      - name: pickup_datetime
+        data_type: timestamp
+        description: "The date and time when the meter was engaged."
+        data_tests:
+          - not_null
+          - dbt_expectations.expect_column_to_exist
+      - name: dropoff_datetime
+        data_type: timestamp
+        description: "The date and time when the meter was disengaged."
+        data_tests:
+          - not_null
+          - dbt_expectations.expect_column_to_exist
+      - name: passenger_count
+        data_type: integer
+        description: "The number of passengers in the vehicle.
+                      This is a driver-entered value."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: integer
+      - name: trip_distance
+        data_type: double
+        description: "The elapsed trip distance in miles reported by the taximeter."
+        data_tests:
+          - not_null
+          - dbt_expectations.expect_column_to_exist
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0 # Negative records are filtered out in staging model
+      - name: rate_code_id
+        data_type: varchar
+        description: "The final rate code in effect at the end of the trip.
+                      Standard rate
+                      JFK
+                      Newark
+                      Nassau or Westchester
+                      Negotiated fare
+                      Group ride"
+        data_tests:
+          - accepted_values:
+              values: ['StandardRate','JFK','Newark','Nassau or Westchester','Negotiated fare','Group ride']
+      - name: store_and_fwd_flag
+        data_type: boolean
+        description: "This flag indicates whether the trip record was held in vehicle memory before sending to the vendor,
+                      aka “store and forward,” because the vehicle did not have a connection to the server.
+                      T= store and forward trip
+                      F= not a store and forward trip"
+      - name: pickup_location_id
+        data_type: integer
+        description: "TLC Taxi Zone in which the taximeter was engaged"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: integer
+          - relationships: # Records not matching are filtered out in staging model
+              to: ref('stg__taxi_zones')
+              field: location_id
+      - name: dropoff_location_id
+        data_type: integer
+        description: "TLC Taxi Zone in which the taximeter was disengaged"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: integer
+          - relationships: # Records not matching are filtered out in staging model
+              to: ref('stg__taxi_zones')
+              field: location_id
+      - name: payment_type
+        data_type: varchar
+        description: "How the passenger paid for the trip.
+                      Credit card
+                      Cash
+                      No charge
+                      Dispute
+                      Unknown
+                      Voided trip"
+        data_tests:
+          - accepted_values:
+              values: ['Credit card','Cash','No charge','Dispute','Unknown','Voided trip']
+      - name: fare_amount
+        data_type: double
+        description: "The time-and-distance fare calculated by the meter."
+      - name: extra
+        data_type: double
+        description: "Miscellaneous extras and surcharges. Currently, this only includes the $0.50 and $1 rush
+                      hour and overnight charges."
+      - name: mta_tax
+        data_type: double
+        description: "$0.50 MTA tax that is automatically triggered based on the metered rate in use."
+      - name: tip_amount
+        data_type: double
+        description: "Tip amount - This field is automatically populated for credit card tips. Cash tips are not included."
+      - name: tolls_amount
+        data_type: double
+        description: "Total amount of all tolls paid in trip."
+      - name: improvement_surcharge
+        data_type: double
+        description: "$0.30 improvement surcharge assessed trips at the flag drop. The improvement surcharge
+                      began being levied in 2015."
+      - name: total_amount
+        data_type: double
+        description: "The total amount charged to passengers. Does not include cash tips."
+      - name: congestion_surcharge
+        data_type: double
+        description: "Total amount collected in trip for NYS congestion surcharge."
+      - name: filename
+        data_type: varchar
+        description: "Name of the Raw Data Source File"
