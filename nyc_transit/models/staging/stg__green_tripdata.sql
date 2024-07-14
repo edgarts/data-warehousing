@@ -32,27 +32,20 @@ renamed as (
         TRY_CAST(passenger_count as integer) as passenger_count,
         -- some distances are negative so changing those to null
         {{ validate_positive_values("trip_distance") }} as trip_distance,
-        -- some fare amounts are negative so changing those to null
-        {{ validate_positive_values("fare_amount") }} as fare_amount,
-        -- some extras are negative so changing those to null
-        {{ validate_positive_values("extra") }} as extra,
+        fare_amount,
+        extra,
         -- MTA stands for Metropolitan Transportation Authority
-        -- some MTA taxes are negative so changing those to null
-        {{ validate_positive_values("mta_tax") }} as mta_tax,
-        -- some tip amounts are negative so changing those to null
-        {{ validate_positive_values("tip_amount") }} as tip_amount,
+        mta_tax,
+        tip_amount,
         tolls_amount,
-        -- some improvement surcharges are negative so changing those to null
-        {{ validate_positive_values("improvement_surcharge") }} as improvement_surcharge,
-        -- some total amounts are negative so changing those to null
-        {{ validate_positive_values("total_amount") }} as total_amount,
+        improvement_surcharge,
+        total_amount,
         -- payment_type code values are:
         -- 1= Credit card, 2= Cash, 3= No charge, 4= Dispute, 5= Unknown, 6= Voided trip
         {{ code_to_category("payment_type", "PaymentType") }} as payment_type,
         -- trip_type values are 1=Street-hail, 2=Dispatch
         {{ code_to_category("trip_type", "TripType") }} as trip_type,
-        -- some congestion surcharges are negative so changing those to null
-        {{ validate_positive_values("congestion_surcharge") }} as congestion_surcharge,
+        congestion_surcharge,
         filename,
 
     from source
