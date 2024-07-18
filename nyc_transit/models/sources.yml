@@ -284,8 +284,6 @@ sources:
             description: "The date/time when passenger requested to be picked up"
             data_tests:
               - not_null:
-                  config:
-                    severity: warn # Some values may not be valid in raw data, raising a warning to be aware
               - dbt_expectations.expect_column_values_to_be_of_type:
                   column_type: timestamp
               - dbt_expectations.expect_column_to_exist

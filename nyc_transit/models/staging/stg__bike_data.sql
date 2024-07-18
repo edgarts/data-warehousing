@@ -24,7 +24,7 @@ old_format_renamed as (
         TRY_CAST(starttime as datetime) as start_time,
         TRY_CAST(stoptime as datetime) as stop_time,
         TRY_CAST("start station id" as integer) as start_station_id,
-        "start_station_name" as start_station_name,
+        "start station name" as start_station_name,
         TRY_CAST("start station latitude" as double) as start_station_latitude,
         TRY_CAST("start station longitude" as double) as start_station_longitude,
         TRY_CAST("end station id" as integer) as end_station_id,

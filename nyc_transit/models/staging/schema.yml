@@ -313,9 +313,11 @@ models:
           - not_null
           - dbt_expectations.expect_column_values_to_be_of_type:
               column_type: integer
-          - relationships: # Records not matching are filtered out in staging model
+          - relationships: # Not enforcing this test to avoid deleting records for tasks in Week 4 and forward
               to: ref('stg__taxi_zones')
               field: location_id
+              config:
+                severity: warn
       - name: dropoff_location_id
         data_type: integer
         description: "TLC Taxi Zone in which the trip ended"
@@ -323,9 +325,11 @@ models:
           - not_null
           - dbt_expectations.expect_column_values_to_be_of_type:
               column_type: integer
-          - relationships: # Records not matching are filtered out in staging model
+          - relationships: # Not enforcing this test to avoid deleting records for tasks in Week 4 and forward
               to: ref('stg__taxi_zones')
               field: location_id
+              config:
+                severity: warn
       - name: trip_distance
         data_type: double
         description: "The total miles for passenger trip"
@@ -452,18 +456,22 @@ models:
         data_tests:
           - dbt_expectations.expect_column_values_to_be_of_type:
               column_type: integer
-          - relationships: # Records not matching are filtered out in staging model
+          - relationships: # Not enforcing this test to avoid deleting records for tasks in Week 4 and forward
               to: ref('stg__taxi_zones')
               field: location_id
+              config:
+                severity: warn
       - name: dropoff_location_id
         data_type: integer
         description: "TLC Taxi Zone in which the taximeter was disengaged"
         data_tests:
           - dbt_expectations.expect_column_values_to_be_of_type:
               column_type: integer
-          - relationships: # Records not matching are filtered out in staging model
+          - relationships: # Not enforcing this test to avoid deleting records for tasks in Week 4 and forward
               to: ref('stg__taxi_zones')
               field: location_id
+              config:
+                severity: warn
       - name: passenger_count
         data_type: integer
         description: "The number of passengers in the vehicle.
@@ -633,18 +641,22 @@ models:
         data_tests:
           - dbt_expectations.expect_column_values_to_be_of_type:
               column_type: integer
-          - relationships: # Records not matching are filtered out in staging model
+          - relationships: # Not enforcing this test to avoid deleting records for tasks in Week 4 and forward
               to: ref('stg__taxi_zones')
               field: location_id
+              config:
+                severity: warn
       - name: dropoff_location_id
         data_type: integer
         description: "TLC Taxi Zone in which the taximeter was disengaged"
         data_tests:
           - dbt_expectations.expect_column_values_to_be_of_type:
               column_type: integer
-          - relationships: # Records not matching are filtered out in staging model
+          - relationships: # Not enforcing this test to avoid deleting records for tasks in Week 4 and forward
               to: ref('stg__taxi_zones')
               field: location_id
+              config:
+                severity: warn
       - name: payment_type
         data_type: varchar
         description: "How the passenger paid for the trip.

@@ -58,14 +58,6 @@ renamed as (
     -- Per the relation between pulocationid to taxi_zones.locationid,
     -- excluding those records which locationid doesn't exist in the zones catalog.
     -- There are 1,283 records which locations don't exist, <1% of 238K+ records.
-    and pickup_location_id in
-    (select locationid from taxi_zones)
-    -- Per the relation between dolocationid to taxi_zones.locationid,
-    -- excluding those records which locationid doesn't exist in the zones catalog.
-    -- There are 502 records which locations don't exist, <1% of 238K+ records.
-    and dropoff_location_id in
-    (select locationid from taxi_zones)
-    -- After all filtering 228K+ remain of a raw count of 238K+, around 96%.
 
 )
 
