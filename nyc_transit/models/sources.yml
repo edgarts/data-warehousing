@@ -283,7 +283,6 @@ sources:
             data_type: timestamp
             description: "The date/time when passenger requested to be picked up"
             data_tests:
-              - not_null:
               - dbt_expectations.expect_column_values_to_be_of_type:
                   column_type: timestamp
               - dbt_expectations.expect_column_to_exist

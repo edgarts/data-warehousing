@@ -40,10 +40,11 @@ old_format_renamed as (
         filename
  
     from source
-    -- tripdurations are not null for the old format records
-    where tripduration is not null
-    -- filtering out trip durations of more than 24 hours or 86400 seconds
-    -- because most likely are outlier cases
+    -- ride_id is null for the old format records
+    where ride_id is null
+    -- filtering out negative trip durations or of more than 24 hours
+    -- (86400 seconds) because most likely are outlier cases
+    and trip_duration_sec >= 0
     and trip_duration_sec <= 86400
     -- removing start_station_id and stop_station_id with null values
     -- due to tests, every Citi bike record should have those values
@@ -80,16 +81,17 @@ new_format_renamed as (
         filename
  
     from source
-    -- tripdurations are null for the new format records
-    where tripduration is null
-    -- filtering out trip durations of more than 24 hours or 86400 seconds
-    -- because most likely are outlier cases
+    -- ride_id is not null for the new format records
+    where ride_id is not null
+    -- filtering out negative trip durations or of more than 24 hours
+    -- (86400 seconds) because most likely are outlier cases
+    and trip_duration_sec >= 0
     and trip_duration_sec <= 86400
     -- removing start_station_id and stop_station_id with null values
     -- due to tests, every Citi bike record should have those values
     -- and there are 8K+ null records among more that 4M
-    and "start station id" is not null
-    and "end station id" is not null
+    and TRY_CAST(start_station_id as integer) is not null
+    and TRY_CAST(end_station_id as integer) is not null
 
 ),
 
