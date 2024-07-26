@@ -32,7 +32,7 @@ with all_trips as (
 diff_bor_trips as (
 
     -- Selects taxi trips from mart__fact_all_taxi_trips and joins each pulocationid and
-    -- dolocationid with taxi+_zone_lookup table independently, then filters for only
+    -- dolocationid with mart__dim_locations table independently, then filters for only
     -- those whose pickup borough is different than dropoff borough, groups by weekday
     -- and calculate total trips
     select
@@ -51,9 +51,9 @@ diff_bor_trips as (
         count(*) as trips_diff_bor_start_end
 
     from {{ ref('mart__fact_all_taxi_trips') }}
-    join {{ ref('taxi+_zone_lookup') }} as pu_zone
+    join {{ ref('mart__dim_locations') }} as pu_zone
     on pulocationid = pu_zone.locationid
-    join {{ ref('taxi+_zone_lookup') }} as do_zone
+    join {{ ref('mart__dim_locations') }} as do_zone
     on dolocationid = do_zone.locationid
     where pu_zone.borough != do_zone.borough
     group by weekday_num, weekday

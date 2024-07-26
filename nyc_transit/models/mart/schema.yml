@@ -77,6 +77,33 @@ models:
       - name: dolocationid
         description: ""
 
+  - name: mart__fact_yellow_taxi_trips
+    description: "all yellow trip data for analysis"
+    columns:
+      - name: type
+        description: ""
+
+      - name: pickup_datetime
+        description: ""
+
+      - name: dropoff_datetime
+        description: ""
+
+      - name: duration_min
+        description: ""
+
+      - name: duration_sec
+        description: ""
+
+      - name: pulocationid
+        description: ""
+
+      - name: dolocationid
+        description: ""
+
+      - name: fare_amount
+        description: ""
+
   - name: mart__fact_all_trips_daily
     description: "all trips including bikes and taxis grouped by day, with averaged trip duration"
     columns:
@@ -108,4 +135,55 @@ models:
         description: ""
 
       - name: duration_sec
+        description: ""
+
+  - name: mart__fact_trips_by_borough
+    description: "number of trips grouped by pickup borough"
+    columns:
+      - name: borough
+        description: ""
+
+      - name: trips_by_borough
+        description: ""
+
+  - name: mart__fact_central_park_weather
+    description: "Central Park Weather Observation Records"
+    columns:
+      - name: date
+        description: ""
+
+      - name: avg_wind_speed
+        description: ""
+
+      - name: precipitation
+        description: ""
+
+      - name: snowfall
+        description: ""
+
+      - name: snow_depth
+        description: ""
+
+      - name: max_temperature
+        description: ""
+
+      - name: min_temperature
+        description: ""
+
+  - name: mart__fact_events
+    description: "Web events records"
+    columns:
+      - name: insert_timestamp
+        description: ""
+
+      - name: event_id
+        description: ""
+
+      - name: event_type
+        description: ""
+
+      - name: user_id
+        description: ""
+
+      - name: event_timestamp
         description: ""
