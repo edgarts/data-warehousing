@@ -28,5 +28,8 @@ duckdb ./database/nyc_transit.db -s ".read ./nyc_transit/target/compiled/nyc_tra
 # Command to run the analysis that finds the average time between taxi pick ups per zone
 duckdb ./database/nyc_transit.db -s ".read ./nyc_transit/target/compiled/nyc_transit/analyses/average_time_between_pickups.sql"
 
-# Command to run the analysis that determines if days immediately preceding precipitation or snow had more bike trips than those with precipitation or snow
+# Command to run the first version of the analysis that determines if days immediately preceding precipitation or snow had more bike trips than those with precipitation or snow
 duckdb ./database/nyc_transit.db -s ".read ./nyc_transit/target/compiled/nyc_transit/analyses/days_before_precip_more_bike_trips.sql"
+
+# Command to run the second version of the analysis that determines if days immediately preceding precipitation or snow had more bike trips than those with precipitation or snow
+duckdb ./database/nyc_transit.db -s ".read ./nyc_transit/target/compiled/nyc_transit/analyses/days_before_precip_more_bike_trips2.sql"

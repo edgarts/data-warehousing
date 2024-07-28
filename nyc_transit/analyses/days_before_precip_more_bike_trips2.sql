@@ -1,12 +1,12 @@
 -- This analysis determines if days immediately preceding precipitation
--- or snow had more bike trips than those with precipitation or snow.
--- This first version of the analysis just take into account pairs of
--- days with no-precipitation/snow day followed by a precipitation/snow
--- day.
+-- or snow had more bike trips than those with precipitation or snow
+-- This second version of the analysis takes into account all those 
+-- days with precipitation and/or snow in a run series and only one
+-- preceding day before the series.
 
 -- Set output to project's answers directory
 -- Per recommendation in Homework 5 Assignment, slide 30
-.once ./answers/days_before_precip_more_bike_trips.txt
+.once ./answers/days_before_precip_more_bike_trips2.txt
 
 -- This analysis is based on the different examples of Week 5 slide
 -- deck
@@ -54,10 +54,10 @@ prcp_snow_bike_trips as (
 -- day, determined the date, precipitation plus snow and bike trips from
 -- the immediately preceding day; used min because the window function
 -- requires and aggregate function but could have used others like max
--- or avg since it retrives only one row, the preceeding one
+-- or avg since it retrives only one row, the preceeding one;
 -- filtered out those which preceding day was null (i.e., the oldest one
 -- in the set) and only included those days which had precipitation or
--- snow but the preceding one did not.
+-- snow.
 current_preced_day as (
 	select
 	
@@ -74,15 +74,43 @@ current_preced_day as (
 		range between interval 1 day preceding
 				  and interval 1 day preceding)
 	qualify prcd_date is not null
-	and prcd_prcp_snow = 0 and curr_prcp_snow > 0
+	and curr_prcp_snow > 0
 		
+),
+
+-- For those which current day had precipitation and/or snow and also the preceding
+-- day, those are part of a run series of precipitation/snow days and those
+-- preceding days should not be counted in the bike trips average, therefore the
+-- bike trips are zeroed for them and a new column is added to help counting the
+-- valid preceding days, meaning, those with no precipitation and/or snow, this
+-- column will be used to calculate the average
+curr_prcd_for_avg as (
+	select
+
+		curr_date,
+		curr_prcp_snow,
+		curr_bike_trips,
+		prcd_date,
+		prcd_prcp_snow,
+		case
+			when prcd_prcp_snow = 0 then prcd_bike_trips
+			else 0
+		end as prcd_bike_trips,
+		case
+			when prcd_prcp_snow = 0 then 1
+			else 0
+		end as prdc_day_count_to_avg
+		
+	from current_preced_day
 )
 
 -- calculate the average of bike trips for both the days with precipitation
--- or snow and the preceding ones.
+-- or snow and the preceding ones with the previous consideration, this latter
+-- ones are calculated manually.
 select
 
 	round(avg(curr_bike_trips), 2) as bike_trips_avg_in_prcp_snow_days,
-	round(avg(prcd_bike_trips), 2) as bike_trips_avg_in_prcd_prcp_snow_days
+	round(sum(prcd_bike_trips) / sum(prdc_day_count_to_avg), 2)
+	as bike_trips_avg_in_prcd_prcp_snow_days
 	
-from current_preced_day
+from curr_prcd_for_avg
